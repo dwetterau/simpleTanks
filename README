@@ -1,0 +1,19 @@
+As of right now below are the controls:
+
+Tank 1 controls:
+a = move gun up
+d = move gun down
+w = increase gun power
+s = decrease gun power
+LEFT shift = shoot
+
+Tank 2 controls:
+l = move gun up
+j = move gun down
+i = increase gun power
+k = decrease gun power
+RIGHT shift = shoot
+
+
+Still needs a lot of game logic and tank gravity/movement
+The command to compile this can be found in the "compile.sh" script
