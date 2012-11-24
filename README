@@ -13,7 +13,3 @@ j = move gun down
 i = increase gun power
 k = decrease gun power
 RIGHT shift = shoot
-
-
-Still needs a lot of game logic and tank gravity/movement
-The command to compile this can be found in the "compile.sh" script

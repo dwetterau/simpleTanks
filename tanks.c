@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <math.h>
 #include "graphics.h"
+#include "charMap.h"
 
 #define PI 3.14159265358979323846
 #define EXPLOSION_RAD 10
@@ -283,6 +284,10 @@ void drawGame(SDL_Surface *screen) {
     drawBarrel(1, screen);
 }
 
+void drawOverlay(SDL_Surface *screen) {
+    DrawString(screen, 255, 0, 0, "Tanks by: David & Adam", 0, 0);
+}
+
 int main() {
 //FILL COLOR MAP===============================================================
     makeColor(&colorMap[0], 0, 0, 0);
@@ -322,6 +327,7 @@ int main() {
     while(!quit){
         placeTanks();
         drawGame(screen);
+        drawOverlay(screen);
         if (madeShot1) {
             clearShot();
             madeShot1 = 0;
