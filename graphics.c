@@ -119,7 +119,7 @@ char clip(float* x0, float* y0, float* x1, float*y1){
 void DrawString(SDL_Surface *screen, Uint8 R, Uint8 G, Uint8 B, char* str, int x, int y) {
     int index = 0;
     while (str[index]) {
-        DrawLetter(screen, R, G, B, str[index], x + 12*index, y);
+        DrawLetter(screen, R, G, B, str[index], x + CHAR_WIDTH*index, y);
         index++;
     }
 }
@@ -127,7 +127,7 @@ void DrawString(SDL_Surface *screen, Uint8 R, Uint8 G, Uint8 B, char* str, int x
 void DrawLetter(SDL_Surface *screen, Uint8 R, Uint8 G, Uint8 B, char c, int x, int y) {
     //x, y is top left corner
     int cur_x, cur_y;
-    for (cur_y = 0; cur_y < 12 && cur_y + y < HEIGHT; cur_y++) {
+    for (cur_y = 0; cur_y < CHAR_HEIGHT && cur_y + y < HEIGHT; cur_y++) {
         for (cur_x = 0; cur_x < 8 && cur_x + x < WIDTH; cur_x++) {
             if (charMap[c-31][cur_y][cur_x]) {
                 DrawPixel(screen, R, G, B, x+cur_x, y+cur_y);

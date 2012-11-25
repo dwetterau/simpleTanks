@@ -1,5 +1,8 @@
 #ifndef H_CHARMAP
 #define H_CHARMAP
+#define CHAR_WIDTH 6
+#define CHAR_HEIGHT 12
+
 static charMap[256][12][8] = 
 {
 {
