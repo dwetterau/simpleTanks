@@ -42,6 +42,11 @@ for i in range(256): #only want the first 256 chars
         newChar.append(newRow)
     finalMat.append(newChar)
 #Print it out in C syntax
+print '#ifndef H_CHARMAP'
+print '#define H_CHARMAP'
+print '#define CHAR_WIDTH 6'
+print '#define CHAR_HEIGHT 12'
+print
 print 'static charMap[256][12][8] = '
 print '{'
 for i in range(len(finalMat)):
@@ -62,3 +67,4 @@ for i in range(len(finalMat)):
     else:
         print  '}'
 print '};'
+print '#endif'

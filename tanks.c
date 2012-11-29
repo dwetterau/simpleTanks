@@ -50,7 +50,7 @@ enum gameState state = START_MENU;
 int tank_1_score, tank_2_score, additional_delay;
 char* message = "Welcome to Tanks!";
 tank tanks [2]; 
-color colorMap [5]; //0 = empty, 1 = grass, 2 = tank1, 3 = tank2, 4 = projectile
+color colorMap [6]; //0 = empty, 1 = grass, 2 = tank1, 3 = tank2, 4 = projectile
 char gameState [WIDTH*HEIGHT];
 
 
@@ -205,14 +205,21 @@ void initializeTanks() {
 
 void initializeGame() {
     initializeTanks();
-    state = TANK_1_AIM;
+    tank_1_score = 0;
+    tank_2_score = 0;
+    state = START_MENU;
+    message = "Welcome to Tanks!";
     //For now I'm just going to make it a hilly thing:
     // f(x) = 100*sin(x/(50)*pi) + 300
     int x, y;
     for (x = 0; x < WIDTH; x++) {
         int start = (int) (30.0*sin(x/50.0*PI)) + 300;
-        for (y = start; y < HEIGHT; y++) {
-            gameState[y*WIDTH+x] = 1;
+        for (y = 0; y < HEIGHT; y++) {
+            if (y >= start) {
+                gameState[y*WIDTH+x] = 1;
+            } else {
+                gameState[y*WIDTH+x] = 0;
+            }
         }
     }
 }
@@ -267,7 +274,7 @@ void makeCrater(int x, int y) {
         for (cur_y = y_min; cur_y <= y_max; cur_y++) {
             if (dist(cur_x, cur_y, x, y) <= EXPLOSION_RAD) {
                 int index = (HEIGHT-cur_y)*WIDTH + cur_x; 
-                gameState[index] = 0;
+                gameState[index] = 5;
             }
         }
     }
@@ -278,7 +285,7 @@ void clearShot() {
     int x, y;
     for (x = 0; x < WIDTH; x++) {
         for (y = 0; y < HEIGHT; y++) {
-            if(gameState[y*WIDTH + x] == 4) {
+            if(gameState[y*WIDTH + x] == 4 || gameState[y*WIDTH + x] == 5) {
                 gameState[y*WIDTH + x] = 0;
             }
         }
@@ -377,6 +384,7 @@ int main() {
     makeColor(&colorMap[2], 255, 0, 0);
     makeColor(&colorMap[3], 0, 0, 255);
     makeColor(&colorMap[4], 255, 255, 255);
+    makeColor(&colorMap[5], 204, 85, 0);
 //INITIALIZE GAME==============================================================
     initializeGame();
 //WINDOW FRAME SETUP===========================================================
@@ -406,11 +414,11 @@ int main() {
                 break;
             case TANK_1_SHOOTING:
                 nextState = TANK_2_AIM;
-                additional_delay = 1000;
+                additional_delay = 300;
                 break;
             case TANK_2_SHOOTING:
                 nextState = TANK_1_AIM;
-                additional_delay = 1000;
+                additional_delay = 300;
                 break;
             case TANK_1_AIM:
                 message = "Awaiting shot from tank 1...";
@@ -433,6 +441,11 @@ int main() {
                     case SDLK_ESCAPE:
                         quit = 1;
                         SDL_Quit();
+                        break;
+                    //New game
+                    case SDLK_r:
+                        initializeGame();
+                        continue;
                         break;
                     //Tank 1 stuff
                     case SDLK_a:
