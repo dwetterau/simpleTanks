@@ -279,7 +279,6 @@ void makeCrater(int x, int y) {
         }
     }
 }
-
 //TODO make this less COMPLETELY shitty
 void clearShot() {
     int x, y;
@@ -290,6 +289,15 @@ void clearShot() {
             }
         }
     }
+}
+void moveTank(int i) {
+    //moves tanks back to earth.
+    int y = tanks[i].y;
+    while (y-TANK_HEIGHT-1 > 0 && gameState[WIDTH*(HEIGHT - (y-TANK_HEIGHT-1)) 
+        + tanks[i].x] == 0) {
+        y--;
+    }
+    tanks[i].y = y;
 }
 
 void placeTank(int index) {
@@ -305,8 +313,24 @@ void placeTank(int index) {
     }
 }
 
+void clearTank(int index) {
+    int x_min, x_max, y_min, y_max, x, y;
+    x_min = max(0, tanks[index].x - TANK_WIDTH);
+    x_max = min(WIDTH-1, tanks[index].x + TANK_WIDTH);
+    y_min = max(0, tanks[index].y - TANK_HEIGHT);
+    y_max = min(HEIGHT-1, tanks[index].y + TANK_HEIGHT);
+    for (x = x_min; x <= x_max; x++) {
+        for (y = y_min; y <= y_max; y++) {
+            gameState[(HEIGHT - y)*WIDTH + x] = 0;
+        }
+    }
+}
+
 void placeTanks() {
-    //TODO make sure there's no hole beneath the tank now and move it down
+    clearTank(0);
+    clearTank(1);
+    moveTank(0);
+    moveTank(1);
     placeTank(0);
     placeTank(1);
 }
@@ -318,10 +342,10 @@ void drawBarrel(int tankNumber, SDL_Surface *screen) {;
     } else {
         x_barrel_end = - tanks[tankNumber].power * BARREL * cos(tanks[tankNumber].angle) + tanks[tankNumber].x;
     }
-    int y_barrel_end = -tanks[tankNumber].power * BARREL * sin(tanks[tankNumber].angle) + tanks[tankNumber].y;
+    int y_barrel_end = tanks[tankNumber].power * BARREL * sin(tanks[tankNumber].angle) + tanks[tankNumber].y;
    color * col = &colorMap[2+tankNumber];
    DrawLine(screen, col->red, col->green, col->blue, tanks[tankNumber].x, 
-   HEIGHT - tanks[tankNumber].y, x_barrel_end, HEIGHT - y_barrel_end);
+   tanks[tankNumber].y, x_barrel_end, y_barrel_end);
 }
 
 void drawGame(SDL_Surface *screen) {
@@ -447,30 +471,36 @@ int main() {
                         initializeGame();
                         continue;
                         break;
-                    //Tank 1 stuff
-                    case SDLK_a:
-                        //tilt tank1 gun up
-                        if (state == TANK_1_AIM) {
-                            tanks[0].angle = min(PI/2-.01, tanks[0].angle + PI/200);
-                        }
-                        break;
-                    case SDLK_d:
-                        //tilt tank1 gun down
-                        if (state == TANK_1_AIM) {
-                            tanks[0].angle = max(0, tanks[0].angle - PI/200);
-                        }
-                        break;
+                    //Combine controls!
                     case SDLK_w:
                         if (state == TANK_1_AIM) {
-                            tanks[0].power = min(200, tanks[0].power+1);
+                            tanks[0].angle = min(PI/2-.01, tanks[0].angle + PI/200);
+                        } else if (state == TANK_2_AIM) {
+                            tanks[1].angle = min(PI/2-.01, tanks[1].angle + PI/200);
                         }
                         break;
                     case SDLK_s:
                         if (state == TANK_1_AIM) {
-                            tanks[0].power = max(1, tanks[0].power-1);
+                            tanks[0].angle = max(0, tanks[0].angle - PI/200);
+                        } else if (state == TANK_2_AIM) {
+                            tanks[1].angle = max(0, tanks[1].angle - PI/200);
                         }
                         break;
-                    case SDLK_LSHIFT:
+                    case SDLK_d:
+                        if (state == TANK_1_AIM) {
+                            tanks[0].power = min(200, tanks[0].power+1);
+                        } else if (state == TANK_2_AIM) {
+                            tanks[1].power = min(200, tanks[1].power+1);
+                        }
+                        break;
+                    case SDLK_a:
+                        if (state == TANK_1_AIM) {
+                            tanks[0].power = max(1, tanks[0].power-1);
+                        } else if (state == TANK_2_AIM) {
+                            tanks[1].power = max(1, tanks[1].power-1);
+                        }
+                        break;
+                    case SDLK_SPACE:
                         if (state == TANK_1_AIM) {
                             //fire shot
                             shootGunTank1(poi);
@@ -487,33 +517,7 @@ int main() {
                             } else {
                                 message = "Tank 1 missed!";
                             }
-                        }
-                        break;
-                    //Tank 2 stuff
-                    case SDLK_l:
-                        //tilt tank2 gun up
-                        if (state == TANK_2_AIM) {
-                            tanks[1].angle = min(PI/2-.01, tanks[1].angle + PI/200);
-                        }
-                        break;
-                    case SDLK_j:
-                        if (state == TANK_2_AIM) {
-                            //tilt tank2 gun down
-                            tanks[1].angle = max(0, tanks[1].angle - PI/200);
-                        }
-                        break;
-                    case SDLK_i:
-                        if (state == TANK_2_AIM) {
-                            tanks[1].power = min(200, tanks[1].power+1);
-                        }
-                        break;
-                    case SDLK_k:
-                        if (state == TANK_2_AIM) {
-                            tanks[1].power = max(1, tanks[1].power-1);
-                        }
-                        break;
-                    case SDLK_RSHIFT:
-                        if (state == TANK_2_AIM) {
+                        } else if (state == TANK_2_AIM) {
                             //fire shot
                             shootGunTank2(poi);
                             makeCrater(poi[0], poi[1]);
