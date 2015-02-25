@@ -1,23 +1,23 @@
 SimpleTanks
 ==========
 
-# To run:
+### To run:
 
 ```
 make
 ./tanks
 ````
 
-# Controls:
+### Controls:
 
 Tank 1 / 2 controls:
-a = move gun up
-d = move gun down
-w = increase gun power
-s = decrease gun power
-space = shoot
+* a = move gun up
+* d = move gun down
+* w = increase gun power
+* s = decrease gun power
+* space = shoot
 
 r = restart
 
-# Sample image:
+### Sample image:
 ![Tank game running](sample.png)
