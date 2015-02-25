@@ -1,8 +1,8 @@
 #ifndef H_GRAPHICS
 #define H_GRAPHICS
 #include <SDL/SDL.h>
-#define HEIGHT (600)
-#define WIDTH (800)
+#define HEIGHT (768)
+#define WIDTH (1024)
 /**
  *
  * Written by David Wetterau

@@ -213,7 +213,7 @@ void initializeGame() {
     // f(x) = 100*sin(x/(50)*pi) + 300
     int x, y;
     for (x = 0; x < WIDTH; x++) {
-        int start = (int) (30.0*sin(x/50.0*PI)) + 300;
+        int start = (int) (30.0*sin(x/50.0*PI)) + 600;
         for (y = 0; y < HEIGHT; y++) {
             if (y >= start) {
                 gameState[y*WIDTH+x] = 1;
@@ -297,14 +297,14 @@ void moveTank(int i) {
         + tanks[i].x] == 0) {
         y--;
     }
-    tanks[i].y = y;
+    tanks[i].y = max(y, 0);
 }
 
 void placeTank(int index) {
     int x_min, x_max, y_min, y_max, x, y;
-    x_min = max(0, tanks[index].x - TANK_WIDTH);
+    x_min = max(1, tanks[index].x - TANK_WIDTH);
     x_max = min(WIDTH-1, tanks[index].x + TANK_WIDTH);
-    y_min = max(0, tanks[index].y - TANK_HEIGHT);
+    y_min = max(1, tanks[index].y - TANK_HEIGHT);
     y_max = min(HEIGHT-1, tanks[index].y + TANK_HEIGHT);
     for (x = x_min; x <= x_max; x++) {
         for (y = y_min; y <= y_max; y++) {
@@ -398,7 +398,6 @@ void drawOverlay(SDL_Surface *screen) {
     DrawString(screen, 0, 0, 255, "Tank 2 score: ", 0, 3*(CHAR_HEIGHT+1));
     convertNum2Str(numbuf, tank_2_score);
     DrawString(screen, 0, 0, 255, numbuf, 14*CHAR_WIDTH, 3*(CHAR_HEIGHT+1));
-
 }
 
 int main() {

@@ -1,15 +1,23 @@
-As of right now below are the controls:
+SimpleTanks
+==========
 
-Tank 1 controls:
+# To run:
+
+```
+make
+./tanks
+````
+
+# Controls:
+
+Tank 1 / 2 controls:
 a = move gun up
 d = move gun down
 w = increase gun power
 s = decrease gun power
-LEFT shift = shoot
+space = shoot
 
-Tank 2 controls:
-l = move gun up
-j = move gun down
-i = increase gun power
-k = decrease gun power
-RIGHT shift = shoot
+r = restart
+
+# Sample image:
+![Tank game running](sample.png)
